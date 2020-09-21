@@ -10,14 +10,18 @@ class Texture {
 
     public:
         Texture(SDL_Renderer* sdlRenderer, const string& bmpfile);
-        Texture(SDL_Renderer* sdlRenderer, const string& bmpfile, int R, int G, int B);
+        //Texture(SDL_Renderer* sdlRenderer, const string& bmpfile, int R, int G, int B);
         ~Texture();
         int copyTo(SDL_Renderer* sdlRenderer);
         int copyTo(SDL_Renderer* sdlRenderer, int X, int Y);
         int copyTo(SDL_Renderer* sdlRenderer, int dX, int dY, int sX, int sY, int sW, int sH);
+        int getWidth();
+        int getHeight();
         
     private:
         SDL_Texture *sdlTexture;
+        int width;
+        int height;
 };
 
 #endif

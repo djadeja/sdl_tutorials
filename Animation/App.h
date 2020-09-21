@@ -3,7 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include "Event.h"
-#include "Animation.h"
+#include "Entity.h"
+#include "Player.h"
+
 #include <vector>
 
 using namespace std;
@@ -14,11 +16,6 @@ enum class CellType {
             None,
             X,
             O
-        };
-
-enum class Player {
-            A,
-            B
         };
 
 class App : public Event {
@@ -37,13 +34,15 @@ class App : public Event {
         void setCell(int pos, CellType type);
         void OnLButtonDown(int mX, int mY);
         void OnRButtonDown(int mX, int mY);
+        void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+        void OnKeyUp(SDL_Keycode sym, Uint16 mod);
         
     private:
         bool running;
         SDL_Window *mainWindow;
         SDL_Renderer *mainRenderer;
-        Texture *animTexture;
-        Animation animYoshi;
+        Player  player;
+        Player  player2;
 };
 
 #endif

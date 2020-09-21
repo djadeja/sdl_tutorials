@@ -1,22 +1,19 @@
 #include "Texture.h"
+#include "SDL2_image/SDL_image.h"
 
-Texture::Texture(SDL_Renderer* sdlRenderer, const string& bmpfile) : sdlTexture(NULL) {
+// Texture::Texture(SDL_Renderer* sdlRenderer, const string& bmpfile) : sdlTexture(NULL) {
+//     if (sdlRenderer != NULL) {
+//         SDL_Surface *bmpSurface = SDL_LoadBMP(bmpfile.c_str());
+//         if (bmpSurface) {
+//             this->sdlTexture = SDL_CreateTextureFromSurface(sdlRenderer, bmpSurface);
+//         }
+//     }
+// }
+
+Texture::Texture(SDL_Renderer* sdlRenderer, const string& file) : sdlTexture(NULL), width(0), height(0) {
     if (sdlRenderer != NULL) {
-        SDL_Surface *bmpSurface = SDL_LoadBMP(bmpfile.c_str());
-        if (bmpSurface) {
-            this->sdlTexture = SDL_CreateTextureFromSurface(sdlRenderer, bmpSurface);
-        }
-    }
-}
-
-Texture::Texture(SDL_Renderer* sdlRenderer, const string& bmpfile, int R, int G, int B) : sdlTexture(NULL) {
-    if (sdlRenderer != NULL) {
-        SDL_Surface *bmpSurface = SDL_LoadBMP(bmpfile.c_str());
-
-        if (bmpSurface) {
-            SDL_SetColorKey(bmpSurface, SDL_TRUE | SDL_RLEACCEL, SDL_MapRGB(bmpSurface->format, R, G, B));
-            this->sdlTexture = SDL_CreateTextureFromSurface(sdlRenderer, bmpSurface);
-        }
+        sdlTexture = IMG_LoadTexture(sdlRenderer, file.c_str());       
+        SDL_QueryTexture(sdlTexture, NULL, NULL, &width, &height);
     }
 }
 
@@ -34,14 +31,11 @@ int Texture::copyTo(SDL_Renderer* sdlRenderer) {
 
 int Texture::copyTo(SDL_Renderer* sdlRenderer, int x, int y) {
     if (sdlTexture && sdlRenderer) {        
-        int srcTextW;
-        int srcTextH;
-        SDL_QueryTexture(sdlTexture, NULL, NULL, &srcTextW, &srcTextH);
         SDL_Rect destR;
         destR.x = x;
         destR.y = y;
-        destR.w = srcTextW;
-        destR.h = srcTextH;
+        destR.w = getWidth();
+        destR.h = getHeight();
         return SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, &destR);
     }
     return 0;
@@ -62,4 +56,12 @@ int Texture::copyTo(SDL_Renderer* sdlRenderer, int dX, int dY, int sX, int sY, i
         return SDL_RenderCopy(sdlRenderer, sdlTexture, &srcR, &destR);
     }
     return 0;
+}
+
+int Texture::getWidth() {
+    return width;
+}
+
+int Texture::getHeight() {
+    return height;
 }
